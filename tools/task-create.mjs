@@ -27,6 +27,8 @@ export default async function ({ mcpServer, toolName, log }) {
       ).min(1),
     },
     async (_args, _extra) => {
+      log.debug(`${toolName} Request`, { _args, _extra });
+
       let bearerToken = _extra?.bearerToken;
       if (!bearerToken && _args.bearerToken) {
         bearerToken = _args.bearerToken;
@@ -39,7 +41,6 @@ export default async function ({ mcpServer, toolName, log }) {
         return buildResponse({ error: 'No bearer token provided.' });
       }
       try {
-        log.debug(`${toolName} Request`, { _args });
         // Always send { tasks: [...] } to the API, and filter to only allowed fields
         const allowedFields = ['details', 'parent_id', 'scheduled_time', 'sort_order', 'status', 'title'];
         let payload;
