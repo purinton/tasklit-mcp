@@ -18,7 +18,7 @@
 
 ## Overview
 
-This project is an MCP server built on [`@purinton/mcp-server`](https://www.npmjs.com/package/@purinton/mcp-server). It exposes a set of tools via the Model Context Protocol, making them accessible to AI agents and automation clients.
+This project is an MCP server built on [`@purinton/mcp-server`](https://www.npmjs.com/package/@purinton/mcp-server) [![npm version](https://img.shields.io/npm/v/@purinton/mcp-server-template.svg)](https://www.npmjs.com/package/@purinton/mcp-server-template). It exposes a set of tools via the Model Context Protocol, making them accessible to AI agents and automation clients.
 
 **Key Features:**
 
@@ -123,7 +123,7 @@ You can run this server as a background service on Linux using the provided `mcp
 Copy `mcp-server-template.service` to your systemd directory (usually `/etc/systemd/system/`):
 
 ```bash
-sudo cp mcp-server-template.service /etc/systemd/system/
+sudo cp mcp-server-template.service /usr/lib/systemd/system/
 ```
 
 ### 2. Adjust paths and environment
@@ -146,6 +146,44 @@ sudo systemctl status mcp-server-template
 ```
 
 The server will now run in the background and restart automatically on failure or reboot.
+
+## Running with Docker
+
+You can run this MCP server in a Docker container using the provided `Dockerfile`.
+
+### 1. Build the Docker image
+
+```bash
+docker build -t mcp-server-template .
+```
+
+### 2. Run the container
+
+Set your environment variables (such as `MCP_TOKEN`) and map the port as needed:
+
+```bash
+docker run -d \
+  -e MCP_TOKEN=your_secret_token \
+  -e MCP_PORT=1234 \
+  -p 1234:1234 \
+  --name mcp-server-template \
+  mcp-server-template
+```
+
+- Replace `your_secret_token` with your desired token.
+- You can override the port by changing `-e MCP_PORT` and `-p` values.
+
+### 3. Updating the image
+
+If you make changes to the code, rebuild the image and restart the container:
+
+```bash
+docker build -t mcp-server-template .
+docker stop mcp-server-template && docker rm mcp-server-template
+# Then run the container again as above
+```
+
+---
 
 ## Support
 
