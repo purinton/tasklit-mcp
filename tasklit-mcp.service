@@ -1,5 +1,5 @@
 [Unit]
-Description=mcp-server-template
+Description=tasklit-mcp
 After=network-online.target
 Wants=network-online.target
 StartLimitBurst=3
@@ -10,9 +10,9 @@ User=root
 Group=root
 RestartSec=5
 Restart=on-failure
-WorkingDirectory=/opt/mcp-server-template
-ExecStart=/opt/mcp-server-template/mcp-server-template.mjs
-EnvironmentFile=/opt/mcp-server-template/.env
+WorkingDirectory=/opt/tasklit-mcp
+ExecStart=/opt/tasklit-mcp/tasklit-mcp.mjs
+EnvironmentFile=/opt/tasklit-mcp/.env
 
 [Install]
 WantedBy=multi-user.target
