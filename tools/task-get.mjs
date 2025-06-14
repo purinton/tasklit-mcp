@@ -10,6 +10,7 @@ export default async function ({ mcpServer, toolName, log }) {
       task_ids: z.array(z.number()),
     },
     async (_args, _extra) => {
+      log.debug(`${toolName} Request`, { _args, _extra });
       let bearerToken = _extra?.bearerToken;
       if (!bearerToken && _args.bearerToken) {
         bearerToken = _args.bearerToken;
@@ -22,7 +23,6 @@ export default async function ({ mcpServer, toolName, log }) {
         return buildResponse({ error: 'No bearer token provided.' });
       }
       try {
-        log.debug(`${toolName} Request`, { _args });
         const response = await fetch('https://tasklit.com/api/task_get.php', {
           method: 'POST',
           headers: {
