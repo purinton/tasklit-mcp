@@ -10,15 +10,8 @@ export default async function ({ mcpServer, toolName, log }) {
       task_ids: z.array(z.number()),
     },
     async (_args, _extra) => {
-      log.debug(`${toolName} Request`, { _args, _extra });
-      let bearerToken = _extra?.bearerToken;
-      if (!bearerToken && _args.bearerToken) {
-        bearerToken = _args.bearerToken;
-        delete _args.bearerToken;
-      }
-      if (!bearerToken && typeof global.__currentBearerToken__ === 'string') {
-        bearerToken = global.__currentBearerToken__;
-      }
+      log.debug(`${toolName} Request`, { _args });
+      let bearerToken = _extra?._meta?.bearerToken;
       if (!bearerToken) {
         return buildResponse({ error: 'No bearer token provided.' });
       }

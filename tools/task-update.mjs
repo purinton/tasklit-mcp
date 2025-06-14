@@ -30,14 +30,7 @@ export default async function ({ mcpServer, toolName, log }) {
     },
     async (_args, _extra) => {
       log.debug(`${toolName} Request`, { _args });
-      let bearerToken = _extra?.bearerToken;
-      if (!bearerToken && _args.bearerToken) {
-        bearerToken = _args.bearerToken;
-        delete _args.bearerToken;
-      }
-      if (!bearerToken && typeof global.__currentBearerToken__ === 'string') {
-        bearerToken = global.__currentBearerToken__;
-      }
+      let bearerToken = _extra?._meta?.bearerToken;
       if (!bearerToken) {
         return buildResponse({ error: 'No bearer token provided.' });
       }

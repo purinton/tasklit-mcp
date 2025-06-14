@@ -30,7 +30,11 @@ if (!fs.existsSync(toolsDir)) {
 
 // Define the authentication callback function
 const authCallback = (bearerToken) => {
-    return true; // Tasklit API will decide if the token is valid
+    if (!bearerToken || !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(bearerToken)) {
+        log.error('Invalid bearer token format', { bearerToken });
+        return false;
+    }
+    return true;
 };
 
 // Import and start the MCP server
