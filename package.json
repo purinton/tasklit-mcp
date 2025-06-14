@@ -1,5 +1,5 @@
 {
-    "name": "@purinton/project-template",
+    "name": "@purinton/mcp-server-template",
     "type": "module",
     "version": "1.0.0",
     "description": "A template for starting new Node.js projects.",
@@ -9,20 +9,18 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/purinton/project-template.git"
+        "url": "git+https://github.com/purinton/mcp-server-template.git"
     },
     "keywords": [
-        "project-template",
-        "nodejs",
-        "starter",
-        "template"
+        "mcp-server-template",
+        "nodejs"
     ],
     "author": "Russell Purinton <russell@purinton.us>",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/purinton/project-template/issues"
+        "url": "https://github.com/purinton/mcp-server-template/issues"
     },
-    "homepage": "https://github.com/purinton/project-template#readme",
+    "homepage": "https://github.com/purinton/mcp-server-template#readme",
     "devDependencies": {
         "jest": "^30.0.0"
     },
