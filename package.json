@@ -2,7 +2,7 @@
     "name": "@purinton/mcp-server-template",
     "type": "module",
     "version": "1.0.0",
-    "description": "A template for starting new Node.js projects.",
+    "description": "A Model Context Protocol (MCP) server template for building AI and automation tool APIs.",
     "main": "project.mjs",
     "scripts": {
         "test": "npx --node-options=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles --silent"
@@ -12,8 +12,12 @@
         "url": "git+https://github.com/purinton/mcp-server-template.git"
     },
     "keywords": [
+        "mcp-server",
         "mcp-server-template",
-        "nodejs"
+        "ai-tools",
+        "automation",
+        "nodejs",
+        "template"
     ],
     "author": "Russell Purinton <russell@purinton.us>",
     "license": "MIT",
