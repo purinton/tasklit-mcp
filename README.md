@@ -2,13 +2,14 @@
 
 ## @purinton/tasklit-mcp [![npm version](https://img.shields.io/npm/v/@purinton/tasklit-mcp.svg)](https://www.npmjs.com/package/@purinton/tasklit-mcp)[![license](https://img.shields.io/github/license/purinton/tasklit-mcp.svg)](LICENSE)[![build status](https://github.com/purinton/tasklit-mcp/actions/workflows/nodejs.yml/badge.svg)](https://github.com/purinton/tasklit-mcp/actions)
 
-> A Model Context Protocol (MCP) server providing a set of custom tools for AI and automation workflows. Easily extendable with your own tools.
+> **Tasklit MCP** is a Model Context Protocol (MCP) server providing a set of custom tools for AI and automation workflows, focused on task management. It is designed for integration with AI agents and automation clients, and is easily extendable with your own tools.
 
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
+- [Features](#features)
 - [Available Tools](#available-tools)
 - [Usage](#usage)
 - [Extending & Customizing](#extending--customizing)
@@ -18,36 +19,52 @@
 
 ## Overview
 
-This project is an MCP server built on [`@purinton/mcp-server`](https://www.npmjs.com/package/@purinton/mcp-server) [![npm version](https://img.shields.io/npm/v/@purinton/mcp-server.svg)](https://www.npmjs.com/package/@purinton/mcp-server). It exposes a set of tools via the Model Context Protocol, making them accessible to AI agents and automation clients.
+This project is an MCP server built on [`@purinton/mcp-server`](https://www.npmjs.com/package/@purinton/mcp-server). It exposes a set of task management tools via the Model Context Protocol, making them accessible to AI agents and automation clients.
 
-**Key Features:**
+## Features
 
 - Dynamic tool loading from the `tools/` directory
+- Task management tools: create, update, delete, search, get, and log time on tasks
 - Simple to add or modify tools
 - HTTP API with authentication
 - Built for easy extension
+- Ready for Docker and systemd deployment
 
 ## Available Tools
 
 Below is a list of tools provided by this MCP server. Each tool can be called via the MCP protocol or HTTP API.
 
-### Example: Echo Tool
+### `task-create`
 
-**Name:** `echo`  
-**Description:** Returns the text you send it.
+**Description:** Creates one or more tasks. Returns an array of the task IDs that were created.
 
 **Input Schema:**
 
 ```json
-{ "echoText": "string" }
+{
+  "tasks": [
+    {
+      "details": "string (optional)",
+      "parent_id": "number (optional)",
+      "scheduled_time": "string (optional)",
+      "sort_order": "number (optional)",
+      "status": "pending | in progress | on hold | blocked | review | cancelled | completed (optional)",
+      "title": "string"
+    }
+  ]
+}
 ```
 
 **Example Request:**
 
 ```json
 {
-  "tool": "echo",
-  "args": { "echoText": "Hello, world!" }
+  "tool": "task-create",
+  "args": {
+    "tasks": [
+      { "title": "Write documentation", "status": "pending" }
+    ]
+  }
 }
 ```
 
@@ -55,15 +72,189 @@ Below is a list of tools provided by this MCP server. Each tool can be called vi
 
 ```json
 {
-  "message": "echo-reply",
-  "data": { "text": "Hello, world!" }
+  "message": "task-create-reply",
+  "data": { "task_ids": [123] }
 }
 ```
 
-<!--
-Repeat the above block for each tool you add.
-Document: tool name, description, input schema, example request/response.
--->
+### `task-update`
+
+**Description:** Updates one or more tasks by ID.
+
+**Input Schema:**
+
+```json
+{
+  "tasks": [
+    {
+      "id": "number",
+      "details": "string (optional)",
+      "parent_id": "number (optional)",
+      "scheduled_time": "string (optional)",
+      "sort_order": "number (optional)",
+      "status": "pending | in progress | on hold | blocked | review | cancelled | completed (optional)",
+      "time_logged": "number (optional)",
+      "title": "string (optional)"
+    }
+  ]
+}
+```
+
+**Example Request:**
+
+```json
+{
+  "tool": "task-update",
+  "args": {
+    "tasks": [
+      { "id": 123, "status": "completed" }
+    ]
+  }
+}
+```
+
+**Example Response:**
+
+```json
+{
+  "message": "task-update-reply",
+  "data": { "success": true }
+}
+```
+
+### `task-delete`
+
+**Description:** Delete one or more tasks by their IDs.
+
+**Input Schema:**
+
+```json
+{
+  "task_ids": [123, 124]
+}
+```
+
+**Example Request:**
+
+```json
+{
+  "tool": "task-delete",
+  "args": { "task_ids": [123] }
+}
+```
+
+**Example Response:**
+
+```json
+{
+  "message": "task-delete-reply",
+  "data": { "deleted": [123] }
+}
+```
+
+### `task-get`
+
+**Description:** Get all of a task's info by its ID.
+
+**Input Schema:**
+
+```json
+{
+  "task_ids": [123]
+}
+```
+
+**Example Request:**
+
+```json
+{
+  "tool": "task-get",
+  "args": { "task_ids": [123] }
+}
+```
+
+**Example Response:**
+
+```json
+{
+  "message": "task-get-reply",
+  "data": { "tasks": [ { "id": 123, "title": "Write documentation", ... } ] }
+}
+```
+
+### `task-search`
+
+**Description:** Search/list all task titles and details for given statuses.
+
+**Input Schema:**
+
+```json
+{
+  "search_string": "string (optional)",
+  "includes": {
+    "pending": true,
+    "in progress": true,
+    "on hold": false,
+    "blocked": false,
+    "review": false,
+    "cancelled": false,
+    "completed": false
+  }
+}
+```
+
+**Example Request:**
+
+```json
+{
+  "tool": "task-search",
+  "args": {
+    "search_string": "documentation",
+    "includes": { "pending": true, "in progress": true, "on hold": false, "blocked": false, "review": false, "cancelled": false, "completed": false }
+  }
+}
+```
+
+**Example Response:**
+
+```json
+{
+  "message": "task-search-reply",
+  "data": { "tasks": [ { "id": 123, "title": "Write documentation" } ] }
+}
+```
+
+### `task-log-time`
+
+**Description:** Add or remove time spent on a task.
+
+**Input Schema:**
+
+```json
+{
+  "tasks": [
+    { "task_id": 123, "minutes": 30 }
+  ]
+}
+```
+
+**Example Request:**
+
+```json
+{
+  "tool": "task-log-time",
+  "args": { "tasks": [ { "task_id": 123, "minutes": 30 } ] }
+}
+```
+
+**Example Response:**
+
+```json
+{
+  "message": "task-log-time-reply",
+  "data": { "success": true }
+}
+```
 
 ## Usage
 
