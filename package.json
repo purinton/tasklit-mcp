@@ -35,6 +35,7 @@
     "dependencies": {
         "@purinton/common": "^1.0.10",
         "@purinton/mcp-server": "^1.0.5",
-        "dotenv": "^16.5.0"
+        "dotenv": "^16.5.0",
+        "node-fetch": "^3.3.2"
     }
 }

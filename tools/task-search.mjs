@@ -1,11 +1,9 @@
-import { z } from 'zod';
-import log from '../log.mjs';
-import { buildResponse } from '../toolHelpers.mjs';
+import { z, buildResponse } from '@purinton/mcp-server';
 import fetch from 'node-fetch';
 import https from 'https';
 
-export default async function (server, toolName = 'task-search') {
-  server.tool(
+export default async function ({ mcpServer, toolName, log }) {
+  mcpServer.tool(
     toolName,
     'Search/list all task titles and details for a given statuses.',
     {
@@ -20,12 +18,13 @@ export default async function (server, toolName = 'task-search') {
         completed: z.boolean(),
       }),
     },
-    async (args, extra) => {
+    async (_args, _extra) => {
+      log.debug(`${toolName} Request`, { _args });
       // Workaround: try to get bearerToken from args if not in extra
-      let bearerToken = extra?.bearerToken;
-      if (!bearerToken && args.bearerToken) {
-        bearerToken = args.bearerToken;
-        delete args.bearerToken;
+      let bearerToken = _extra?.bearerToken;
+      if (!bearerToken && _args.bearerToken) {
+        bearerToken = _args.bearerToken;
+        delete _args.bearerToken;
       }
       // Fallback to global injected token
       if (!bearerToken && typeof global.__currentBearerToken__ === 'string') {
@@ -41,10 +40,11 @@ export default async function (server, toolName = 'task-search') {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${bearerToken}`,
           },
-          body: JSON.stringify(args),
+          body: JSON.stringify(_args),
           agent: new https.Agent({ rejectUnauthorized: false })
         });
         const data = await response.json();
+        log.debug(`${toolName} Response`, { data });
         return buildResponse(data);
       } catch (e) {
         log.error('task_search error', e);
