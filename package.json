@@ -38,8 +38,8 @@
         ]
     },
     "dependencies": {
-        "@purinton/common": "^1.0.10",
         "@purinton/mcp-server": "^1.0.14",
+        "@purinton/common": "^1.0.11",
         "dotenv": "^16.5.0"
     }
 }
