@@ -3,8 +3,9 @@
     "type": "module",
     "version": "1.0.0",
     "description": "A Model Context Protocol (MCP) server template for building AI and automation tool APIs.",
-    "main": "project.mjs",
+    "main": "mcp-server-template.mjs",
     "scripts": {
+        "start": "node mcp-server-template.mjs",
         "test": "npx --node-options=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles --silent"
     },
     "repository": {
