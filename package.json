@@ -27,7 +27,7 @@
     },
     "homepage": "https://github.com/purinton/mcp-server-template#readme",
     "devDependencies": {
-        "jest": "^30.0.0"
+        "jest": "^30.0.1"
     },
     "jest": {
         "testEnvironment": "node",
@@ -39,7 +39,7 @@
     },
     "dependencies": {
         "@purinton/common": "^1.0.16",
-        "@purinton/mcp-server": "^1.0.19",
+        "@purinton/mcp-server": "^1.0.20",
         "dotenv": "^16.5.0"
     }
 }
