@@ -27,7 +27,7 @@
     },
     "homepage": "https://github.com/purinton/tasklit-mcp#readme",
     "devDependencies": {
-        "jest": "^30.0.2"
+        "jest": "^30.0.3"
     },
     "jest": {
         "testEnvironment": "node",
@@ -39,8 +39,8 @@
     },
     "dependencies": {
         "@purinton/common": "^1.0.16",
-        "@purinton/mcp-server": "^1.0.20",
-        "dotenv": "^16.5.0",
+        "@purinton/mcp-server": "^1.0.21",
+        "dotenv": "^17.0.0",
         "node-fetch": "^3.3.2"
     }
 }
