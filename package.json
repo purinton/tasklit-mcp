@@ -1,7 +1,7 @@
 {
     "name": "@purinton/tasklit-mcp",
     "type": "module",
-    "version": "1.0.17",
+    "version": "1.0.18",
     "description": "A Model Context Protocol (MCP) server for task management, providing tools for creating, updating, searching, and tracking tasks via API for AI and automation workflows.",
     "main": "tasklit-mcp.mjs",
     "scripts": {
